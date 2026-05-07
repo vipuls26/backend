@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateApplicationStatusRequest;
 use App\Http\Resources\ApplicationResource;
+use App\Jobs\SendApplicationStatusEmail;
 use App\Models\Application;
 use App\Models\PortalNotification;
 use App\Support\ApiResponse;
@@ -44,12 +45,13 @@ class RecruiterApplicationController extends Controller
 
         $application->update(['status' => $validated['status']]);
 
-        if (in_array($validated['status'], ['Interview Scheduled', 'Accepted', 'Rejected'], true)) {
+        if (in_array($validated['status'], ['interview_scheduled', 'accepted', 'rejected'], true)) {
             PortalNotification::create([
                 'user_id' => $application->user_id,
                 'title' => $this->notificationTitle($validated['status']),
                 'message' => "Your application for {$application->job->title} at {$application->job->company->name} was {$this->notificationMessageStatus($validated['status'])}.",
             ]);
+            SendApplicationStatusEmail::dispatch($application->refresh());
         }
 
         return $this->success(
@@ -61,18 +63,18 @@ class RecruiterApplicationController extends Controller
     private function notificationTitle(string $status): string
     {
         return match ($status) {
-            'Accepted' => 'Application accepted',
-            'Rejected' => 'Application rejected',
-            'Interview Scheduled' => 'Interview scheduled',
+            'accepted' => 'Application accepted',
+            'rejected' => 'Application rejected',
+            'interview_scheduled' => 'Interview scheduled',
         };
     }
 
     private function notificationMessageStatus(string $status): string
     {
         return match ($status) {
-            'Accepted' => 'accepted',
-            'Rejected' => 'rejected',
-            'Interview Scheduled' => 'moved to interview scheduled',
+            'accepted' => 'accepted',
+            'rejected' => 'rejected',
+            'interview_scheduled' => 'moved to interview scheduled',
         };
     }
 }

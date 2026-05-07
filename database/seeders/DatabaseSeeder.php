@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
             ['company_id' => $company->id, 'title' => 'Frontend Developer'],
             [
                 'location' => 'Remote',
-                'type' => 'Full Time',
+                'type' => 'full_time',
                 'salary' => '$4k - $7k',
                 'experience' => '2+ years',
                 'status' => 'published',
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
             ['company_id' => $company->id, 'title' => 'Laravel Backend Developer'],
             [
                 'location' => 'Ahmedabad',
-                'type' => 'Full Time',
+                'type' => 'full_time',
                 'salary' => '$5k - $8k',
                 'experience' => '3+ years',
                 'status' => 'published',
@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder
             ['company_id' => $company->id, 'title' => 'UI Design Intern'],
             [
                 'location' => 'Hybrid',
-                'type' => 'Internship',
+                'type' => 'internship',
                 'salary' => '$800 - $1.2k',
                 'experience' => 'Fresher',
                 'status' => 'published',
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
             ['company_id' => $company->id, 'title' => 'DevOps Engineer'],
             [
                 'location' => 'Remote',
-                'type' => 'Contract',
+                'type' => 'contract',
                 'salary' => '$6k - $9k',
                 'experience' => '4+ years',
                 'status' => 'draft',
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
                 'full_name' => $candidate->name,
                 'email' => $candidate->email,
                 'cover_letter' => 'I am interested in building clean, responsive frontend experiences for Pixel Labs.',
-                'status' => 'Pending',
+                'status' => 'pending',
             ]
         );
 
@@ -118,7 +118,7 @@ class DatabaseSeeder extends Seeder
                 'full_name' => $secondCandidate->name,
                 'email' => $secondCandidate->email,
                 'cover_letter' => 'I have Laravel API experience and would love to contribute to your backend team.',
-                'status' => 'Interview Scheduled',
+                'status' => 'interview_scheduled',
             ]
         );
 

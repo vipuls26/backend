@@ -2,34 +2,33 @@
 
 namespace App\Http\Requests;
 
-use App\Support\ValueNormalizer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RegisterRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     public function authorize(): bool
     {
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'role' => ValueNormalizer::enumLike($this->input('role')),
-        ]);
-    }
-
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function rules(): array
     {
+        $userId = $this->user()?->id;
+
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', Rule::in(['candidate', 'recruiter'])],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'email' => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
+            'password' => ['sometimes', 'required', 'string', 'min:8', 'confirmed'],
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
@@ -41,8 +40,6 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Please enter a password.',
             'password.min' => 'Password must be at least 8 characters.',
             'password.confirmed' => 'Password confirmation does not match.',
-            'role.required' => 'Please select an account role.',
-            'role.in' => 'Role must be either candidate or recruiter.',
         ];
     }
 }
