@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Support\ValueNormalizer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,10 +13,17 @@ class UpdateApplicationStatusRequest extends FormRequest
         return $this->user()?->isRecruiter() === true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'status' => ValueNormalizer::enumLike($this->input('status')),
+        ]);
+    }
+
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::in(['Pending', 'Interview Scheduled', 'Accepted', 'Rejected'])],
+            'status' => ['required', Rule::in(['pending', 'interview_scheduled', 'accepted', 'rejected'])],
         ];
     }
 
@@ -23,7 +31,7 @@ class UpdateApplicationStatusRequest extends FormRequest
     {
         return [
             'status.required' => 'Please select an application status.',
-            'status.in' => 'Application status must be Pending, Interview Scheduled, Accepted, or Rejected.',
+            'status.in' => 'Application status must be pending, interview_scheduled, accepted, or rejected.',
         ];
     }
 }

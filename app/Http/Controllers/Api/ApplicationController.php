@@ -42,7 +42,7 @@ class ApplicationController extends Controller
             ...$request->validated(),
             'job_id' => $job->id,
             'user_id' => $request->user()->id,
-            'status' => 'Pending',
+            'status' => 'pending',
         ])->load(['job.company', 'user']);
 
         return $this->success((new ApplicationResource($application))->resolve($request), 'Application submitted.', 201);
